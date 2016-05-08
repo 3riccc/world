@@ -1,20 +1,6 @@
-function World(){
-	this.width = 10000;
-	this.height = 10000;
-	// 能源0——草赖以生存的能源
-	this.zero = 1;
-	// 能源1、2、3、4相互影响
-	this.one = 100;
-};
-// 创造一个世界
-World.factory = function(){
-	var world = new World;
-	return world;
-}
-
-
-// 草
-function Grass(){
+function Grass(x,y){
+	//种类
+	this.type = "grass";
 	// 移动速度为0
 	this.moveSpeed = 0;
 	// 生命值
@@ -23,6 +9,9 @@ function Grass(){
 	this.age = 1;
 	// 营养价值
 	this.value = 100;
+	// 地理坐标
+	this.x = x;
+	this.y = y;
 };
 // 草的生长
 Grass.prototype.grow = function (){
@@ -51,8 +40,13 @@ Grass.prototype.grow = function (){
 }
 // 草的繁殖
 Grass.prototype.birth = function (){
-	// 如果草的年龄够了40，则有可能繁殖
-
+	// 如果草的年龄20-40，则有0.3的概率可能繁殖
+	if(this.age > 20 && this.age < 40 && Math.random() < 0.3){
+		//距离
+		var dis = Math.floor(Math.random()*100);
+		var grass = this.factory(this.x+dis,this.y+dis);
+		world.register(grass);
+	}
 }
 // 草的进化
 Grass.prototype.evolution = function (){
@@ -60,25 +54,14 @@ Grass.prototype.evolution = function (){
 }
 // 草在一个时间单位做的事情
 Grass.prototype.timeLoop = function (){
-	this.evolution();
-	this.birth();
 	this.grow();
+	this.birth();
+	this.evolution();
 }
 // 创造一颗草
-Grass.factory = function (){
-	var grass = new Grass;
+Grass.factory = function (x,y){
+	var grass = new Grass(x,y);
 	return grass;
 }
-
-
-
-
-// 草食动物
-function Sheep(){
-	// 进化
-
-};
-// 肉食动物
-function C(){
-
-};
+// 导出
+exports.Grass = Grass;
