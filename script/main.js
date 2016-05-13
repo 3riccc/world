@@ -4,14 +4,17 @@ require.config({
 		"World": "world",
 		"Grass": "grass",
 		"Sheep": "sheep",
-		"Wolf":"wolf"
+		"Wolf": "wolf",
+		"Canvas": "canvas",
+		"AnimalCommon": "AnimalCommon"
 	}
 });
 //模块加载
-require(['World', 'Grass'], function (World, Grass){
+require(['World', 'Grass','Wolf','Canvas'], function (World, Grass,Wolf,Canvas){
 	var world = World.factory();
-	console.log(world)
-	world.init(6)
-
-
+	world.init(1000,30,1);
+	console.log(world);
+	var canvas = Canvas.factory();
+	canvas.init();
+	canvas.initDraw();
 });

@@ -7,6 +7,9 @@ define(function(){
 		//移动方向
 		this.moveX = 0;
 		this.moveY = 0;
+		//位置
+		this.x = x;
+		this.y = y;
 	};
 	// 创造一头羊
 	Wolf.factory = function (x,y,id){

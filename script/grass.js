@@ -4,14 +4,12 @@ define(function(){
 		this.type = "grass";
 		//id
 		this.id = id;
-		// 移动速度为0
-		this.moveSpeed = 0;
 		// 生命值
 		this.hp = 1;
 		// 年龄
 		this.age = 1;
 		// 营养价值
-		this.value = 100;
+		this.value = 10;
 		// 地理坐标
 		this.x = x;
 		this.y = y;
@@ -23,20 +21,20 @@ define(function(){
 			case this.age < 20:
 				this.age ++;
 				this.hp = this.hp + 3;
-				this.value = 100;
+				this.value = 10;
 				break;
 			case this.age < 40:
 				this.age ++;
 				this.hp = this.hp + 2;
-				this.value = 150;
+				this.value = 15;
 				break;
 			case this.age < 60:
 				this.age ++;
 				this.hp ++;
-				this.value = 200;
+				this.value = 20;
 				break;
 			default:
-				this.value = 150;
+				this.value = 15;
 				this.age ++;
 				this.hp --;
 		}
