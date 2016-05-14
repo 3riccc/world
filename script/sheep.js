@@ -41,30 +41,62 @@ define(["AnimalCommon"],function(AnimalCommon){
 			//狼距离多近时会对羊有影响
 			wolfDis = 100,
 			//随机数的大小
-			ranRange = 10;
+			ranRange = 10,
+			//距离多近的羊会产生影响
+			sheepDis = 10;
 
 		//第一因素，随机数
 		var ranX = Math.random() * ranRange - (ranRange / 2);
 		var ranY = Math.random() * ranRange - (ranRange / 2);
+
+
+
 		//第二因素，附近的草
 		var nearArr = AnimalCommon.findNear(this.x,this.y,10);
-		
+		//最近的草的列表
+		var nearGrassList = [];
 		for(let index of nearArr){
-			if(world.landRecordGrass.hasOwnProperty(index[x]+'-'+index[y])){
-
+			if(world.landRecordGrass.hasOwnProperty(index[0]+'-'+index[1])){
+				nearGrassList.push([index[0],index[1],world.landRecordGrass[index[0]+'-'+index[1]]]);
 			}
 		}
-		// var grsEfectX = 0,
-		// 	grsEfectY = 0;
-		// for(var i=0; i < world.grassList.length; i++){
-		// 	//横向和纵向的距离
-		// 	let disX = world.grassList[i].x - this.x;
-		// 	let disY = world.grassList[i].y - this.y;
-		// 	if(Math.abs(disX) < grassDis && Math.abs(disY) < grassDis){
-		// 		grsEfectX = grsEfectX * i + disX;
-		// 		grsEfectY = grsEfectY * i + disY;
-		// 	}
-		// }
+		//根据附近的草来算哪个方向比较好
+		var grassX = 0;
+		var grassY = 0;
+		for(let index of nearGrassList){
+			grassX += index[0] - this.x;
+			grassY += index[1] - this.y;
+		}
+		//nearArr置空，因为下面还要用
+		nearArr = [];
+		//nearGrassList置空，为了节省内存
+		nearGrassList = null;
+
+
+
+		//第三因素 附近的羊，这个算法现在是错的，根据的应该是附近的最多六只羊的速度方向，而不是相对位置
+		nearArr = AnimalCommon.findNear(this.x,this.y,10);
+		var nearSheepList = [],
+			sheepX = 0,
+			sheepY = 0;
+		for(let index of world.sheepList){
+			if(Math.abs(index.x - this.x) < sheepDis && Math.abs(index.y - this.y) < sheepDis){
+				nearSheepList.push([index.x - this.x,index.y - this.y]);
+			}
+		}
+		console.log(nearSheepList)
+		for(let index of nearSheepList){
+			sheepX += index[0];
+			sheepY += index[1];
+		}
+		nearArr = []
+		nearSheepList = null;
+
+
+
+		//第四因素，附近的狼
+		
+
 	}
 	// 创造一头羊
 	Sheep.factory = function (x,y,id){
