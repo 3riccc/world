@@ -1,4 +1,4 @@
-define(['Grass','Sheep','Wolf'],function(Grass,Sheep,Wolf){
+define(['Grass','Sheep','Wolf',"Canvas"],function(Grass,Sheep,Wolf,Canvas){
 	var World = function (){
 		//世界的面积
 		this.width = 1200;
@@ -85,6 +85,15 @@ define(['Grass','Sheep','Wolf'],function(Grass,Sheep,Wolf){
 			}
 		}
 
+	};
+	//世界的循环
+	World.prototype.timeLoop = function (){
+		//羊的循环
+		for(var index of world.sheepList){
+			index.timeLoop();
+		}
+		//下一帧的世界
+		window.canvas.draw();
 	}
 	// 创造世界的工厂
 	World.factory = function(){
@@ -92,6 +101,5 @@ define(['Grass','Sheep','Wolf'],function(Grass,Sheep,Wolf){
 		window.world = world;
 		return world;
 	}
-
 	return World;
 });

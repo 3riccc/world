@@ -44,6 +44,22 @@ define(["AnimalCommon"],function(AnimalCommon){
 			ranRange = 10,
 			//距离多近的羊会产生影响
 			sheepDis = 10;
+		var proportion = {
+			ran : 50,
+			grass : 30,
+			sheep : 30,
+			wolf : 200,
+			//上一刻的速度
+			speedBefor : 30
+		}
+		//计算一个比重的总和，尽情修改proportion中的比重，这个总和会自动生成
+		proportion.sum = 0;
+		for(var index in proportion){
+			if(index == "sum"){
+				continue;
+			}
+			proportion.sum += proportion[index];
+		}
 
 		//第一因素，随机数
 		var ranX = Math.random() * ranRange - (ranRange / 2);
@@ -81,10 +97,9 @@ define(["AnimalCommon"],function(AnimalCommon){
 			sheepY = 0;
 		for(let index of world.sheepList){
 			if(Math.abs(index.x - this.x) < sheepDis && Math.abs(index.y - this.y) < sheepDis){
-				nearSheepList.push([index.x - this.x,index.y - this.y]);
+				nearSheepList.push([index.moveX,index.moveY]);
 			}
 		}
-		console.log(nearSheepList)
 		for(let index of nearSheepList){
 			sheepX += index[0];
 			sheepY += index[1];
@@ -94,9 +109,25 @@ define(["AnimalCommon"],function(AnimalCommon){
 
 
 
-		//第四因素，附近的狼
-		
+		//第四因素，附近的狼，这些因素先放下，先让羊尝试动起来
+		nearArr = [this.x,this.y,40];
+		var nearWolfList = [],
+			wolfX = 0,
+			wolfY = 0;
 
+		//确定最终的移动方向
+		this.moveX = (grassX * proportion.grass + sheepX * proportion.sheep + ranX * proportion.ran)/proportion.sum * 10;
+		this.moveY = (grassX * proportion.grass + sheepY * proportion.sheep + ranY * proportion.ran)/proportion.sum * 10;
+	},
+	//移动
+	Sheep.prototype.move = function (){
+		this.x += this.moveX;
+		this.y += this.moveY;
+	}
+	//一个时间单位中，羊会做的事情
+	Sheep.prototype.timeLoop = function(){
+		this.movePrepare();
+		this.move();
 	}
 	// 创造一头羊
 	Sheep.factory = function (x,y,id){

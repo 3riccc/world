@@ -35,6 +35,14 @@ define([],function(){
 			this.ctx.fillStyle="blue";
 			this.ctx.fillRect(x-2,y-2,4,4);
 		}
+	};
+	//每一次画
+	Canvas.prototype.draw = function(){
+		this.ctx.clearRect(0,0,world.width,world.height);
+		//画一个背景，沙土的颜色
+		this.ctx.fillStyle = "#E5D1AC";
+		this.ctx.fillRect(0,0,world.width,world.height);
+		this.initDraw();
 	}
 	//获取不同程度的绿色的颜色
 	Canvas.prototype.getGreenColor = function(degree){
