@@ -12,7 +12,7 @@ require.config({
 //模块加载
 require(['World', 'Grass','Wolf','Canvas'], function (World, Grass,Wolf,Canvas){
 	window.world = World.factory();
-	world.init(1000,10,1);
+	world.init(5000,1,1);
 	console.log(world);
 	window.canvas = Canvas.factory();
 	canvas.init();

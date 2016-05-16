@@ -46,7 +46,7 @@ define(["AnimalCommon"],function(AnimalCommon){
 			sheepDis = 10;
 		var proportion = {
 			ran : 50,
-			grass : 30,
+			grass : 50,
 			sheep : 30,
 			wolf : 200,
 			//上一刻的速度
@@ -68,7 +68,7 @@ define(["AnimalCommon"],function(AnimalCommon){
 
 
 		//第二因素，附近的草
-		var nearArr = AnimalCommon.findNear(this.x,this.y,10);
+		var nearArr = AnimalCommon.findNear(this.x,this.y,20);
 		//最近的草的列表
 		var nearGrassList = [];
 		for(let index of nearArr){
@@ -80,11 +80,19 @@ define(["AnimalCommon"],function(AnimalCommon){
 		var grassX = 0;
 		var grassY = 0;
 		for(let index of nearGrassList){
-			grassX += index[0] - this.x;
-			grassY += index[1] - this.y;
+			grassX += (index[0] - this.x);
+			grassY += (index[1] - this.y);
 		}
 		//nearArr置空，因为下面还要用
 		nearArr = [];
+		var moveDirc1 = '左',
+			moveDirc2 = '上';
+		if(grassX > 0){
+			moveDirc1 = '右';
+		}
+		if(grassY>0){
+			moveDirc2 = '下'
+		}
 		//nearGrassList置空，为了节省内存
 		nearGrassList = null;
 
@@ -101,8 +109,8 @@ define(["AnimalCommon"],function(AnimalCommon){
 			}
 		}
 		for(let index of nearSheepList){
-			sheepX += index[0];
-			sheepY += index[1];
+			// sheepX += index[0];
+			// sheepY += index[1];
 		}
 		nearArr = []
 		nearSheepList = null;
@@ -116,13 +124,24 @@ define(["AnimalCommon"],function(AnimalCommon){
 			wolfY = 0;
 
 		//确定最终的移动方向
-		this.moveX = (grassX * proportion.grass + sheepX * proportion.sheep + ranX * proportion.ran)/proportion.sum * 10;
-		this.moveY = (grassX * proportion.grass + sheepY * proportion.sheep + ranY * proportion.ran)/proportion.sum * 10;
+		this.moveX = (grassX * proportion.grass + sheepX * proportion.sheep + ranX * proportion.ran)/proportion.sum;
+		this.moveY = (grassY * proportion.grass + sheepY * proportion.sheep + ranY * proportion.ran)/proportion.sum;
+		// this.moveY = grassY;
 	},
 	//移动
 	Sheep.prototype.move = function (){
-		this.x += this.moveX;
-		this.y += this.moveY;
+		if(this.x + this.moveX < 0 || this.x + this.moveX > world.width){
+			this.x -= this.moveX;
+		}else{
+			this.x += this.moveX;
+		}
+
+		if(this.y + this.moveY <0 || this.y + this.moveY > world.height){
+			this.y -= this.moveY;
+		}else{
+			this.y += this.moveY;
+
+		}
 	}
 	//一个时间单位中，羊会做的事情
 	Sheep.prototype.timeLoop = function(){

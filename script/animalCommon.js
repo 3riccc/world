@@ -4,6 +4,8 @@ define(function(){
 	};
 	//寻找附近的东西，返回一个附近的坐标列表，由近及远
 	AnimalCommon.findNear = function (x,y,dis){
+		x = Math.floor(x);
+		y = Math.floor(y);
 		var arr = [];
 		for(var i=0;i<dis;i++){
 			for(var xIn = x -i;xIn < x+i;xIn++){
